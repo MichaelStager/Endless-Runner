@@ -5,11 +5,6 @@ class Play extends Phaser.Scene
         super("playScene")
     }
 
-     preload()
-    {
-        this.load.image('brick','./assets/testBrick.png')
-    }
-
     create()
     {
         //Make lane lines
@@ -21,6 +16,9 @@ class Play extends Phaser.Scene
         this.enemy1 = new Obstical(this,(width/3)/2,50,'brick',0,20)
         this.enemy2 = new Obstical(this,(width/3)+(width/3)/2,50,'brick',0,20)
         this.enemy3 = new Obstical(this,(width/3)*2 +(width/3)/2,50,'brick',0,20)
+
+        //add player
+        this.player = new Player(this,'player')
     }
 
     update()

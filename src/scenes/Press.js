@@ -8,6 +8,7 @@ class Press extends Phaser.Scene
     preload()
     {
         this.load.image('brick','./assets/testBrick.png')
+        this.load.image('player','./assets/testPlayer.png')
     }
 
     create()
