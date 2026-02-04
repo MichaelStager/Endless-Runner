@@ -7,7 +7,11 @@ class Obstical extends Phaser.GameObjects.Image
         this.moveSpeed = speed 
     }
 
-    
+    update()
+    {
+  //  this.enemy1.displayWidth += this.moveSpeed
+  //  this.enemy1.displayHeight += this.moveSpeed
+    }
 
 
 }
