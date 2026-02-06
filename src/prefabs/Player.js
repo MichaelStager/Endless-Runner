@@ -2,7 +2,7 @@ class Player extends Phaser.GameObjects.Image
 {
     constructor(scene,texture)
     {
-        super(scene,(width/3)+(width/3)/2,height-100,texture)
+        super(scene,(width/3)+(width/3)/2,height-200,texture)
         scene.add.existing(this)
         this.lanePos = 2
         // use the scene's input manager (keyboard is lowercase) and register handlers once

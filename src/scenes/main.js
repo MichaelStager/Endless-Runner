@@ -4,8 +4,8 @@
 
 let config = {
     type: Phaser.AUTO,
-    width: 720,
-    height: 1280,
+    width: 1920, //720
+    height: 1080, //1280
     backgroundColor: '#ff0000',
     scene: [Press, Play]
     

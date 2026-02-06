@@ -4,8 +4,11 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        //Declare scene vars here
         this.speed = 20
         this.LanePostions = [(width / 3) / 2,(width / 3) + (width / 3) / 2,(width / 3) * 2 + (width / 3) / 2]
+        //add Background image here
+        this.add.image(width/2,height/2,'grassbg').setOrigin(.5,.5)
         //Make lane lines
         this.add.rectangle(width / 3, height / 2, 10, height, 0x0000f)
         this.add.rectangle((width / 3) * 2, height / 2, 10, height, 0x0000f)
