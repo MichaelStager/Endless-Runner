@@ -15,14 +15,15 @@ class Press extends Phaser.Scene
     create()
     {
         //making a text config for uniform text
-        let textConfig = {
+        let preTextConfig = {
             fontSize: 40,
-            color: 0xffffff
+            bold:true,
+            fill: '#ff0000'
         }
 
         //display text to screen
-    this.add.text(width/2,height/6,"Click To Start",textConfig).setOrigin(0.5,0.5)
-    this.add.text(width/2,height/5,"Controls: A & D",textConfig).setOrigin(0.5,0.5)
+    this.add.text(width/2,height/6,"Click The Screen To Start",preTextConfig).setOrigin(0.5,0.5)
+
        
     }
 
@@ -30,7 +31,7 @@ class Press extends Phaser.Scene
     {
         //go to next scene when screen is pressed
         this.input.on('pointerdown',() =>{
-            this.scene.start('playScene')
+            this.scene.start('menuScene')
         })
     }
 

@@ -11,6 +11,7 @@ class Obstical extends Phaser.GameObjects.Image
         //scale the object up to a set size and move it down the screen, so it looks like it's coming toward the player
     moveObstical()
     {
+        
         this.y += this.moveSpeed
         if(this.scaleX < 3){
         console.log(this.scaleX)
