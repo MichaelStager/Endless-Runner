@@ -8,7 +8,9 @@ class Play extends Phaser.Scene {
         this.speed = 20
         this.LanePostions = [(width / 3) / 2,(width / 3) + (width / 3) / 2,(width / 3) * 2 + (width / 3) / 2]
         //add Background image here
-        this.add.image(width/2,height/2,'grassbg').setOrigin(.5,.5)
+        this.bgImage = this.add.image(width/2,height/2,'grassbg').setOrigin(.5,.5)
+        // Position scrolling BG at top of bgImage (off-screen initially)
+        this.scrollingBG = this.add.tileSprite(width/2, -height, 1, 1, 'longbg').setOrigin(.5,.5)
         //Make lane lines
         this.add.rectangle(width / 3, height / 2, 10, height, 0x0000f)
         this.add.rectangle((width / 3) * 2, height / 2, 10, height, 0x0000f)
@@ -28,6 +30,15 @@ class Play extends Phaser.Scene {
         this.enemy1.moveObstical()
         this.enemy2.moveObstical()
         this.enemy3.moveObstical()
+        this.bgImage.setY(this.bgImage.y +1)
+        // Move scrollingBG down with bgImage to keep it at the top
+        this.scrollingBG.setY(this.scrollingBG.y + 1)
+        
+        // Only apply scrolling to scrollingBG once bgImage has moved enough that scrollingBG fills the screen
+        // This happens when bgImage.y is greater than height/2 + some offset
+        if(this.bgImage.y > height/2 + (this.bgImage.displayHeight / 2)) {
+            this.scrollingBG.tilePositionY += 1
+        }
 
         
 
@@ -64,4 +75,5 @@ class Play extends Phaser.Scene {
                 break
         }
     }
+    
 }

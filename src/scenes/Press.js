@@ -9,7 +9,9 @@ class Press extends Phaser.Scene
     {
         this.load.image('brick','./assets/testBrick.png')
         this.load.image('player','./assets/testPlayer.png')
-        this.load.image('grassbg','./assets/grassBG.png')
+        this.load.image('grassbg','./assets/backgroundTower.png')
+        this.load.image('longbg','./assets/longneck.png')
+        
     }
 
     create()
