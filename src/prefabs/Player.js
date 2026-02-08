@@ -4,6 +4,7 @@ class Player extends Phaser.GameObjects.Image
     {
         super(scene,(width/3)+(width/3)/2,height-200,texture)
         scene.add.existing(this)
+        scene.physics.add.existing(this)
         this.lanePos = 2
         // use the scene's input manager (keyboard is lowercase) and register handlers once
         this.keyLeft = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
