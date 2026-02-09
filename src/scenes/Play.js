@@ -18,7 +18,7 @@ class Play extends Phaser.Scene {
         //add Background image here
         this.bgImage = this.add.image(width/2,height/2,'grassbg').setOrigin(.5,.5)
         // Position scrolling BG at top of bgImage (off-screen initially)
-        this.scrollingBG = this.add.tileSprite(width/2, -height, 0, 0, 'longbg').setOrigin(.5,.5)
+        this.scrollingBG = this.add.tileSprite(width/2, -height/2, 0, 0, 'longbg').setOrigin(.5,.5).setScale(0.5,0.5)
         //Make lane lines
         this.add.rectangle(width / 3, height / 2, 10, height, 0x0000f)
         this.add.rectangle((width / 3) * 2, height / 2, 10, height, 0x0000f)
@@ -47,7 +47,7 @@ class Play extends Phaser.Scene {
         this.bgImage.setY(this.bgImage.y +2)
         // Move scrollingBG down with bgImage to keep it at the top
        
-        if(this.scrollingBG.y <height){
+        if(this.scrollingBG.y <height/2){
              this.scrollingBG.setY(this.scrollingBG.y + 2)
         }
         else{
@@ -73,7 +73,7 @@ class Play extends Phaser.Scene {
         this.speed+= .001
 
         //After 30 seconds flash the screen the screen white for a second to indicate the game just got harder, will need to add a ui overlay to make it look crazier
-        if(this.myClock == 1800/4){
+        if(this.myClock == 1800){
                 this.cameras.main.flash(5000, 255, 255, 255)
             }
             this.myClock +=1;
