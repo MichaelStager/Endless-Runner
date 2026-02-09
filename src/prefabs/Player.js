@@ -24,4 +24,16 @@ class Player extends Phaser.GameObjects.Image
             }
         })
     }
+    blockAnimation()
+    {
+        //Rotates the sheild to wiggle like it blocked, plays when the player collides with an enemy, might add a timer to make it so it only plays once every second or so, to prevent it from just vibrating when you get hit by an enemy
+         this.scene.tweens.add({
+            targets: this,
+            angle: { from: -5, to: 5 },
+            duration: 100,
+            yoyo: true,
+            
+        });
+
+    }
 }

@@ -14,9 +14,9 @@ class Obstical extends Phaser.GameObjects.Image
     {
         
         this.y += this.moveSpeed
-        if(this.scaleX < 3){
+        if(this.scaleX < 1.5){
         console.log(this.scaleX)
-        this.setScale(this.scaleX + 0.01, this.scaleY + 0.03)
+        this.setScale(this.scaleX + 0.03, this.scaleY + 0.03)
         }
 
 
@@ -29,6 +29,8 @@ class Obstical extends Phaser.GameObjects.Image
             this.setScale(0.1,0.1)
             this.moveSpeed = speed
         }
+
+    
     
 
 
