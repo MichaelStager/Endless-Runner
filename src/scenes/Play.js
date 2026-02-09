@@ -117,7 +117,7 @@ class Play extends Phaser.Scene {
 
 
         //After 30 seconds flash the screen the screen white for a second to indicate the game just got harder, will need to add a ui overlay to make it look crazier
-        if (this.myClock == 200) {  //1800
+        if (this.myClock == 1800) {  //1800
             this.startNextDifficulty()
 
         }
