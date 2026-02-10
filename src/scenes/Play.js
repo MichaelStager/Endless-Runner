@@ -13,6 +13,10 @@ class Play extends Phaser.Scene {
 
     create() {
         //Declare scene vars here
+        //track score var
+        this.score = 0
+        //track health
+        this.playerHealth = 5
         //tower cords for animation
         this.towerLocationX = ((width / 3)*2) + 50
         this.towerLocationY = height / 3
@@ -75,13 +79,25 @@ class Play extends Phaser.Scene {
         this.enemy3 = new Obstical(this, (width / 3) * 2 + (width / 3) / 2, 50, 'brick', 0, this.speed)
         this.enemies = this.physics.add.group([this.enemy1, this.enemy2, this.enemy3])
 
+        //Add score text and health text, change these later, but for now they work for testing
+        this.textConfig ={
+            fontSize: '64px',
+            color: '#000000'
+        }
+        this.scoreText = this.add.text(width/10,height/20,'Score: ',this.textConfig).setOrigin(0.5,0.5)
+        this.healthText = this.add.text(width/2,height/20,'health: ' + this.playerHealth,this.textConfig).setOrigin(0.5,0.5)
+        
+
         //add player
         this.player = new Player(this, 'player')
 
-        //add collisions
+        //if player and enemy collide respawn the enemy and add score
         this.physics.add.collider(this.player, this.enemies, (player, enemy) => {
             enemy.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
             this.player.blockAnimation()
+            this.score++
+            this.scoreText.text = "Score: " + this.score
+            
             
         })
     }
@@ -101,23 +117,28 @@ class Play extends Phaser.Scene {
             this.scrollingBG.tilePositionY -= this.scrollSpeed
         }
 
-        //if player and enemy collide respawn the enemy and add score
 
         //If an enemy goes off the screen, respawn it at the top with a random lane and speed
         if (this.enemy1.y > height + 100) {
+            this.playerHealth--
+            this.healthText.text = 'Health: ' +this.playerHealth
             this.enemy1.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
         }
         if (this.enemy2.y > height + 100) {
+            this.playerHealth--
+            this.healthText.text = 'Health: ' +this.playerHealth
             this.enemy2.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
         }
         if (this.enemy3.y > height + 100) {
+            this.playerHealth--
+            this.healthText.text = 'Health: ' +this.playerHealth
             this.enemy3.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
         }
         //Speeds up the enemy over time, needs to be reworked, I dont like handling this here.
 
 
         //After 30 seconds flash the screen the screen white for a second to indicate the game just got harder, will need to add a ui overlay to make it look crazier
-        if (this.myClock == 1800) {  //1800
+        if (this.myClock == 800) {  //1800
             this.startNextDifficulty()
 
         }
