@@ -14,6 +14,7 @@ class Play extends Phaser.Scene {
         this.load.audio('claps', './assets/Claps.wav')
         this.load.audio('kicks', './assets/Kicks.wav')
         this.load.audio('bell', './assets/Bell.wav')
+        this.load.audio('evolved','./assets/EvolvedTrack.wav')
     }
 
     create() {
@@ -28,6 +29,7 @@ class Play extends Phaser.Scene {
         this.claps = this.sound.add('claps',audioConfig)
         this.kicks = this.sound.add('kicks',audioConfig)
         this.bell = this.sound.add('bell')
+        this.evolvedTrack = this.sound.add('evolved',audioConfig)
       
         //track score var
         this.score = 0
@@ -221,7 +223,15 @@ class Play extends Phaser.Scene {
         case 3:
             this.kicks.play()
             this.scrollSpeed +=10
-           this.scrollingBG.setTexture('longbg2')
+           break
+        case 4:
+            this.vocals.stop()
+            this.kicks.stop()
+            this.synth.stop()
+            this.claps.stop()
+            this.evolvedTrack.play()
+            this.scrollingBG.setTexture('longbg2')
+            break
         }
         
 
