@@ -9,10 +9,26 @@ class Play extends Phaser.Scene {
         this.load.image('grassbg', './assets/backgroundTower.png')
         this.load.image('longbg', './assets/longneck.png')
         this.load.image('longbg2','./assets/longneck2.png')
+        this.load.audio('vocals', './assets/Vocals.wav')
+        this.load.audio('synth', './assets/Synth.wav')
+        this.load.audio('claps', './assets/Claps.wav')
+        this.load.audio('kicks', './assets/Kicks.wav')
+        this.load.audio('bell', './assets/Bell.wav')
     }
 
     create() {
         //Declare scene vars here
+        //Declare audio
+        let audioConfig = {
+            loop: true,
+        }
+        this.vocals = this.sound.add('vocals',audioConfig)
+        this.synth = this.sound.add('synth',audioConfig)
+        this.synth.play()
+        this.claps = this.sound.add('claps',audioConfig)
+        this.kicks = this.sound.add('kicks',audioConfig)
+        this.bell = this.sound.add('bell')
+      
         //track score var
         this.score = 0
         //track health
@@ -32,6 +48,7 @@ class Play extends Phaser.Scene {
         this.scrollSpeed = 2
         //used to track time , might go away if i use there clock
         this.myClock = 0
+        this.difficultyTimer = this.vocals.duration *2
         //postion for the lanes
         this.LanePostions = [(width / 3) / 2, (width / 3) + (width / 3) / 2, (width / 3) * 2 + (width / 3) / 2]
         //add Background image here
@@ -100,6 +117,18 @@ class Play extends Phaser.Scene {
             
             
         })
+        //Get a reference to a track length
+        const trackDurationMs = Math.ceil(this.vocals.duration * 1000);
+        // timer to better handle difficulty increase
+        this.time.addEvent({
+    delay: trackDurationMs,
+    loop: true,
+    callback: () => {
+      console.log('Every loop seconds while scene is open');
+       this.startNextDifficulty()
+    }
+  })
+
     }
 
     update() {
@@ -138,11 +167,11 @@ class Play extends Phaser.Scene {
 
 
         //After 30 seconds flash the screen the screen white for a second to indicate the game just got harder, will need to add a ui overlay to make it look crazier
-        if (this.myClock == 800) {  //1800
-            this.startNextDifficulty()
+       // if (this.time.clock >= this.difficultyTimer) {  //1800
+         //   this.startNextDifficulty()
 
-        }
-        this.myClock += 1;
+      //  }
+       // this.myClock = this.time.clock;
     }
 
     //Might try to migrate this to Player.js , I feel this does not need to be checked everyframe, just when lanepos changes
@@ -164,6 +193,7 @@ class Play extends Phaser.Scene {
     }
 
     startNextDifficulty() {
+        this.bell.play()
         this.difficultyLevel++
         this.myClock = 0
         this.cameras.main.flash(5000, 255, 255, 255)
@@ -173,6 +203,7 @@ class Play extends Phaser.Scene {
         switch(this.difficultyLevel){
 
         case 1:
+            this.vocals.play()
             this.bgShakeTween = this.tweens.add({
              targets: this.scrollingBG,
              angle: { from: -.5, to: .5 }, // keep small for vibration
@@ -183,10 +214,12 @@ class Play extends Phaser.Scene {
 });
             break
         case 2:
+            this.claps.play()
             this.emitter.start()
             break
 
         case 3:
+            this.kicks.play()
             this.scrollSpeed +=10
            this.scrollingBG.setTexture('longbg2')
         }
