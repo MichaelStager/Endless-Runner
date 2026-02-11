@@ -1,3 +1,5 @@
+
+
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene")
@@ -19,6 +21,10 @@ class Play extends Phaser.Scene {
 
     create() {
         //Declare scene vars here
+        //Make a button for restart after gameover
+        this.keyRestart = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
+        //Gameover bool
+        this.gameover = false;
         //Declare audio
         let audioConfig = {
             loop: true,
@@ -105,7 +111,7 @@ class Play extends Phaser.Scene {
         }
         this.scoreText = this.add.text(width/10,height/20,'Score: ',this.textConfig).setOrigin(0.5,0.5)
         this.healthText = this.add.text(width/2,height/20,'health: ' + this.playerHealth,this.textConfig).setOrigin(0.5,0.5)
-        
+        this.difficultyLevelText = this.add.text((width / 3) * 2 + (width / 3) / 2,height/20,'Difficulty: ' + this.difficultyLevel,this.textConfig).setOrigin(0.5,0.5)
 
         //add player
         this.player = new Player(this, 'player')
@@ -126,14 +132,89 @@ class Play extends Phaser.Scene {
     delay: trackDurationMs,
     loop: true,
     callback: () => {
-      console.log('Every loop seconds while scene is open');
+      if(this.gameover == false){
        this.startNextDifficulty()
+      }
     }
   })
-
     }
 
     update() {
+        if(this.gameover == false){
+       this.gamePlaying()
+    }
+    }
+
+
+    //Might try to migrate this to Player.js , I feel this does not need to be checked everyframe, just when lanepos changes
+    updateLanePosition() {
+        switch (this.player.lanePos) {
+            case 1:
+                this.player.setX((width / 3) / 2)
+                break
+            case 2:
+                this.player.setX((width / 3) + (width / 3) / 2)
+                break
+            case 3:
+                this.player.setX((width / 3) * 2 + (width / 3) / 2)
+                break
+        }
+    }
+
+    startNextDifficulty() {
+        this.bell.play()
+        this.difficultyLevel++
+         this.difficultyLevelText.text = 'Difficulty: ' + this.difficultyLevel
+        this.myClock = 0
+        this.cameras.main.flash(5000, 255, 255, 255)
+        this.scrollSpeed += 2
+        this.speed += 2
+
+        switch(this.difficultyLevel){
+
+        case 1:
+            this.vocals.play()
+            this.bgShakeTween = this.tweens.add({
+             targets: this.scrollingBG,
+             angle: { from: -.5, to: .5 }, // keep small for vibration
+             duration: 120,               // lower = faster vibration
+             yoyo: true,
+            repeat: -1,                 
+            ease: 'Linear'
+});
+            break
+        case 2:
+            this.claps.play()
+            this.emitter.start()
+            break
+        case 3:
+            this.kicks.play()
+            this.scrollSpeed +=10
+           break
+        case 4:
+            this.vocals.stop()
+            this.kicks.stop()
+            this.synth.stop()
+            this.claps.stop()
+            this.evolvedTrack.play()
+            this.scrollingBG.setTexture('longbg2')
+            break
+        }
+        
+
+    }
+
+    gameoverStarted()
+    {
+        this.gameover = true
+        this.add.text(width/2,height/2,"Game Over",this.textConfig).setOrigin(0.5,0.5)
+        this.keyRestart.on('down',()=>{
+             this.scene.start('menuScene')
+        })
+        
+    }
+    gamePlaying()
+    {
         this.updateLanePosition()
         this.enemy1.moveObstical()
         this.enemy2.moveObstical()
@@ -165,75 +246,10 @@ class Play extends Phaser.Scene {
             this.healthText.text = 'Health: ' +this.playerHealth
             this.enemy3.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
         }
-        //Speeds up the enemy over time, needs to be reworked, I dont like handling this here.
-
-
-        //After 30 seconds flash the screen the screen white for a second to indicate the game just got harder, will need to add a ui overlay to make it look crazier
-       // if (this.time.clock >= this.difficultyTimer) {  //1800
-         //   this.startNextDifficulty()
-
-      //  }
-       // this.myClock = this.time.clock;
-    }
-
-    //Might try to migrate this to Player.js , I feel this does not need to be checked everyframe, just when lanepos changes
-    updateLanePosition() {
-        switch (this.player.lanePos) {
-            case 1:
-                console.log("case 1")
-                this.player.setX((width / 3) / 2)
-                break
-            case 2:
-                console.log("case 2")
-                this.player.setX((width / 3) + (width / 3) / 2)
-                break
-            case 3:
-                console.log("case 3")
-                this.player.setX((width / 3) * 2 + (width / 3) / 2)
-                break
+        //Handle GameOver
+        if(this.playerHealth <= 0 && this.gameover==false)
+        {
+            this.gameoverStarted()
         }
-    }
-
-    startNextDifficulty() {
-        this.bell.play()
-        this.difficultyLevel++
-        this.myClock = 0
-        this.cameras.main.flash(5000, 255, 255, 255)
-        this.scrollSpeed += 2
-        this.speed += 2
-
-        switch(this.difficultyLevel){
-
-        case 1:
-            this.vocals.play()
-            this.bgShakeTween = this.tweens.add({
-             targets: this.scrollingBG,
-             angle: { from: -.5, to: .5 }, // keep small for vibration
-             duration: 120,               // lower = faster vibration
-             yoyo: true,
-            repeat: -1,                 
-            ease: 'Linear'
-});
-            break
-        case 2:
-            this.claps.play()
-            this.emitter.start()
-            break
-
-        case 3:
-            this.kicks.play()
-            this.scrollSpeed +=10
-           break
-        case 4:
-            this.vocals.stop()
-            this.kicks.stop()
-            this.synth.stop()
-            this.claps.stop()
-            this.evolvedTrack.play()
-            this.scrollingBG.setTexture('longbg2')
-            break
-        }
-        
-
     }
 }

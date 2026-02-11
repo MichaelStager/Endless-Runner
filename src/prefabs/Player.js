@@ -13,14 +13,14 @@ class Player extends Phaser.GameObjects.Image
         this.keyLeft.on('down', () => {
             if (this.lanePos > 1) {
                 this.lanePos -= 1
-                console.log(this.lanePos)
+                
             }
         })
 
         this.keyRight.on('down', () => {
             if (this.lanePos < 3) {
                 this.lanePos += 1
-                console.log(this.lanePos)
+                
             }
         })
     }

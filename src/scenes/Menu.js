@@ -7,6 +7,7 @@ class Menu extends Phaser.Scene
 
     create()
     {
+        this.nextKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
          this.add.image(width/2,height/2,'grassbg').setOrigin(.5,.5)
         //making a text config for uniform text
         let textConfig = {
@@ -23,7 +24,7 @@ class Menu extends Phaser.Scene
     update()
     {
         //go to next scene when screen is pressed
-        this.input.on('pointerdown',() =>{
+        this.nextKey.on('down',() =>{
             this.scene.start('playScene')
         })
     }
