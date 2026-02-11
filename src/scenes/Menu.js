@@ -26,6 +26,7 @@ class Menu extends Phaser.Scene
         //go to next scene when screen is pressed
         this.nextKey.on('down',() =>{
             this.scene.start('playScene')
+            
         })
     }
 
