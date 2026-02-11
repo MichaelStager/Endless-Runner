@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('grassbg', './assets/backgroundTower.png')
         this.load.image('longbg', './assets/longneck.png')
         this.load.image('longbg2','./assets/longneck2.png')
+        this.load.image('questionmarks',"./assets/questionmarkOverlay.png")
         this.load.audio('vocals', './assets/Vocals.wav')
         this.load.audio('synth', './assets/Synth.wav')
         this.load.audio('claps', './assets/Claps.wav')
@@ -63,6 +64,9 @@ class Play extends Phaser.Scene {
         this.bgImage = this.add.image(width / 2, height / 2, 'grassbg').setOrigin(.5, .5)
         // Position scrolling BG at top of bgImage (off-screen initially)
         this.scrollingBG = this.add.tileSprite(width / 2, -height / 2, 0, 0, 'longbg').setOrigin(.5, .5).setScale(0.5, 0.5)
+
+        //Questionamrk overlay
+        this.questionmarks = this.add.tileSprite(0,height/2,0,0,'questionmarks').setOrigin(0.5,0.5).setRotation(0.35).setAlpha(0)
         //the particle for the tower angles, make it go upwards and fade out, might add some more particles to make it look better
          this.emitter = this.add.particles(this.towerLocationX, this.towerLocationY, 'brick', {
 
@@ -200,6 +204,8 @@ class Play extends Phaser.Scene {
             this.evolvedTrack.setVolume(0.5)
             this.scrollingBG.setTexture('longbg2')
             break
+        case 5:
+            this.questionmarks.setAlpha(1)
         }
         
 
@@ -208,6 +214,8 @@ class Play extends Phaser.Scene {
    
     gamePlaying()
     {
+        //for testing question marks rn
+        this.questionmarks.tilePositionY-= this.scrollSpeed
         this.updateLanePosition()
         this.enemy1.moveObstical()
         this.enemy2.moveObstical()
