@@ -251,7 +251,14 @@ class Play extends Phaser.Scene {
         this.cameras.main.flash(5000, 255, 0, 0)
         this.add.text(width/2,height/2,"Game Over",this.textConfig).setOrigin(0.5,0.5)
         this.keyRestart.on('down',()=>{
-             this.scene.start('menuScene',this)
+        //Stops all music , trun this into a switch case statement for cleaner read, and prob efficeny 
+        this.vocals.stop() 
+        this.synth.stop()
+        this.claps.stop()
+        this.kicks.stop()
+        this.bell.stop()
+        this.evolvedTrack.stop()
+             this.scene.start('menuScene')
         })
         
     }
