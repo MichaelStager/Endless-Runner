@@ -18,16 +18,17 @@ class Menu extends Phaser.Scene
         //display text to screen
     this.add.text(width/2,height/6,"Click To Start",textConfig).setOrigin(0.5,0.5)
     this.add.text(width/2,height/5,"Controls: A & D",textConfig).setOrigin(0.5,0.5)
+    //go to next scene when screen is pressed
+        this.nextKey.on('down',() =>{
+            this.scene.start('playScene')
+            
+        })
        
     }
 
     update()
     {
-        //go to next scene when screen is pressed
-        this.nextKey.on('down',() =>{
-            this.scene.start('playScene')
-            
-        })
+        
     }
 
 

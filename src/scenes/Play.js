@@ -197,6 +197,7 @@ class Play extends Phaser.Scene {
         case 4:
             this.kicks.stop()
             this.evolvedTrack.play()
+            this.evolvedTrack.setVolume(0.5)
             this.scrollingBG.setTexture('longbg2')
             break
         }
