@@ -174,6 +174,7 @@ class Play extends Phaser.Scene {
 
         case 1:
             this.vocals.play()
+            this.synth.stop()
             this.bgShakeTween = this.tweens.add({
              targets: this.scrollingBG,
              angle: { from: -.5, to: .5 }, // keep small for vibration
@@ -185,17 +186,16 @@ class Play extends Phaser.Scene {
             break
         case 2:
             this.claps.play()
+            this.vocals.stop()
             this.emitter.start()
             break
         case 3:
             this.kicks.play()
+            this.claps.stop()
             this.scrollSpeed +=10
            break
         case 4:
-            this.vocals.stop()
             this.kicks.stop()
-            this.synth.stop()
-            this.claps.stop()
             this.evolvedTrack.play()
             this.scrollingBG.setTexture('longbg2')
             break
@@ -204,15 +204,7 @@ class Play extends Phaser.Scene {
 
     }
 
-    gameoverStarted()
-    {
-        this.gameover = true
-        this.add.text(width/2,height/2,"Game Over",this.textConfig).setOrigin(0.5,0.5)
-        this.keyRestart.on('down',()=>{
-             this.scene.start('menuScene')
-        })
-        
-    }
+   
     gamePlaying()
     {
         this.updateLanePosition()
@@ -251,5 +243,16 @@ class Play extends Phaser.Scene {
         {
             this.gameoverStarted()
         }
+    }
+
+     gameoverStarted()
+    {
+        this.gameover = true
+        this.cameras.main.flash(5000, 255, 0, 0)
+        this.add.text(width/2,height/2,"Game Over",this.textConfig).setOrigin(0.5,0.5)
+        this.keyRestart.on('down',()=>{
+             this.scene.start('menuScene',this)
+        })
+        
     }
 }
