@@ -62,7 +62,7 @@ class Play extends Phaser.Scene {
         this.LanePostions = [(width / 3) / 2, (width / 3) + (width / 3) / 2, (width / 3) * 2 + (width / 3) / 2]
         //add Background image here
         this.bgImage = this.add.image(width / 2, height / 2, 'grassbg').setOrigin(.5, .5)
-        // Position scrolling BG at top of bgImage (off-screen initially)
+        // Position scrolling BG at top of bgImage (off-screen initially) get rid of the set scale when I get new scrollin bg asset.
         this.scrollingBG = this.add.tileSprite(width / 2, -height / 2, 0, 0, 'longbg').setOrigin(.5, .5).setScale(0.5, 0.5)
 
         //Questionamrk overlay
