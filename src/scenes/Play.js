@@ -8,10 +8,12 @@ class Play extends Phaser.Scene {
         //load images here
         this.load.image('brick', './assets/testEnemy.png')
         this.load.image('player', './assets/testPlayer.png')
-        this.load.image('grassbg', './assets/backgroundTower.png')
-        this.load.image('longbg', './assets/longneck.png')
+        this.load.image('grassbg', './assets/StartTower.png')
+        this.load.image('longbg', './assets/Sky.png')
         this.load.image('longbg2','./assets/longneck2.png')
         this.load.image('questionmarks',"./assets/questionmarkOverlay.png")
+        this.load.image('tower','./assets/Tower.png')
+        //audio
         this.load.audio('vocals', './assets/Vocals.wav')
         this.load.audio('synth', './assets/Synth.wav')
         this.load.audio('claps', './assets/Claps.wav')
@@ -63,7 +65,8 @@ class Play extends Phaser.Scene {
         //add Background image here
         this.bgImage = this.add.image(width / 2, height / 2, 'grassbg').setOrigin(.5, .5)
         // Position scrolling BG at top of bgImage (off-screen initially) get rid of the set scale when I get new scrollin bg asset.
-        this.scrollingBG = this.add.tileSprite(width / 2, -height / 2, 0, 0, 'longbg').setOrigin(.5, .5).setScale(0.5, 0.5)
+        this.scrollingBG = this.add.tileSprite(width / 2, -height / 2, 0, 0, 'longbg').setOrigin(0.5, 0.5)
+        this.tower = this.add.tileSprite((width/2)-10,-height/2,0,0,'tower').setOrigin(0.5,0.5)
 
         //Questionamrk overlay
         this.questionmarks = this.add.tileSprite(0,height/2,0,0,'questionmarks').setOrigin(0.5,0.5).setRotation(0.35).setAlpha(0)
@@ -225,9 +228,11 @@ class Play extends Phaser.Scene {
 
         if (this.scrollingBG.y < height / 2) {
             this.scrollingBG.setY(this.scrollingBG.y + this.scrollSpeed)
+            this.tower.setY(this.tower.y + this.scrollSpeed)
         }
         else {
             this.scrollingBG.tilePositionY -= this.scrollSpeed
+            this.tower.tilePositionY -= this.scrollSpeed *3
         }
 
 
