@@ -22,6 +22,7 @@ class Play extends Phaser.Scene {
         this.load.audio('kicks', './assets/Kicks.wav')
         this.load.audio('bell', './assets/Bell.wav')
         this.load.audio('evolved','./assets/EvolvedTrack.wav')
+        this.load.audio('shieldHit','./assets/ShieldHit.wav')
 
         //load font
        // this.load.font('roman','./assets/AUGUSTUS.TTF','truetype')
@@ -44,6 +45,7 @@ class Play extends Phaser.Scene {
         this.kicks = this.sound.add('kicks',audioConfig)
         this.bell = this.sound.add('bell')
         this.evolvedTrack = this.sound.add('evolved',audioConfig)
+        this.shieldHit = this.sound.add('shieldHit').setVolume(0.25)
       
         //track score var
         this.score = 0
@@ -140,6 +142,8 @@ class Play extends Phaser.Scene {
             this.player.blockAnimation()
             this.score++
             this.scoreText.text = "Score: " + this.score
+            this.shieldHit.play()
+            
             
             
         })
@@ -215,17 +219,18 @@ class Play extends Phaser.Scene {
            break
         case 4:
             this.kicks.stop()
+            this.vocals.play()
+            break
+        case 5:
+            this.vocals.stop()
             this.evolvedTrack.play()
             this.evolvedTrack.setVolume(0.5)
             this.scrollingBG.setTexture('longbg2')
             break
-        case 5:
+        case 6:
             this.questionmarks.setAlpha(1)
             break
-        case 6:
-            this.mouthMan.setAlpha(0.5)
-            break
-        case 7:
+         case 7:
             this.makeItHome.setAlpha(.9)
             this.tweens.add({
             targets: this.makeItHome,
@@ -234,7 +239,12 @@ class Play extends Phaser.Scene {
             yoyo: true,         
             repeat: -1,
             ease: 'Linear'
-});
+            });  
+            break  
+        case 8:
+            this.mouthMan.setAlpha(0.5)
+            break
+       
             
         }
         

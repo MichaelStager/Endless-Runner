@@ -12,13 +12,18 @@ class Menu extends Phaser.Scene
          this.add.image(width/2,300,'titleart').setOrigin(0.5,0.5)
         //making a text config for uniform text
         let textConfig = {
+           fontFamily: 'roman',
             fontSize: 40,
-            color: 0xffffff
+            bold:true,
+            fill: '#000000',
+            stroke: '#ffffff',
+            strokeThickness: 8
+            
         }
 
         //display text to screen
     this.add.text(width/2,height - 200,"Press Space To Start",textConfig).setOrigin(0.5,0.5)
-    this.add.text(width/2,height - 300,"Controls: A & D",textConfig).setOrigin(0.5,0.5)
+    this.add.text(width/2,height - 250,"Controls: A & D",textConfig).setOrigin(0.5,0.5)
     //go to next scene when screen is pressed
         this.nextKey.on('down',() =>{
             this.scene.start('playScene')
