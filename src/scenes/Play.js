@@ -13,6 +13,8 @@ class Play extends Phaser.Scene {
         this.load.image('longbg2','./assets/longneck2.png')
         this.load.image('questionmarks',"./assets/questionmarkOverlay.png")
         this.load.image('tower','./assets/Tower.png')
+        this.load.image('mouthMan','./assets/mouthMan.png')
+        this.load.image('makeItHome','./assets/MakeItHome.png')
         //audio
         this.load.audio('vocals', './assets/Vocals.wav')
         this.load.audio('synth', './assets/Synth.wav')
@@ -20,6 +22,9 @@ class Play extends Phaser.Scene {
         this.load.audio('kicks', './assets/Kicks.wav')
         this.load.audio('bell', './assets/Bell.wav')
         this.load.audio('evolved','./assets/EvolvedTrack.wav')
+
+        //load font
+       // this.load.font('roman','./assets/AUGUSTUS.TTF','truetype')
     }
 
     create() {
@@ -66,11 +71,16 @@ class Play extends Phaser.Scene {
         this.bgImage = this.add.image(width / 2, height / 2, 'grassbg').setOrigin(.5, .5)
         // Position scrolling BG at top of bgImage (off-screen initially) get rid of the set scale when I get new scrollin bg asset.
         this.scrollingBG = this.add.tileSprite(width / 2, -height / 2, 0, 0, 'longbg').setOrigin(0.5, 0.5)
-        this.tower = this.add.tileSprite((width/2)-10,-height/2,0,0,'tower').setOrigin(0.5,0.5)
+       
 
-        //Questionamrk overlay
+        //LAyered arts that overlay
         this.questionmarks = this.add.tileSprite(0,height/2,0,0,'questionmarks').setOrigin(0.5,0.5).setRotation(0.35).setAlpha(0)
+        this.mouthMan = this.add.sprite(width/2,(height/2) - 300,'mouthMan').setOrigin(0.5,0.5).setAlpha(0)
+        this.makeItHome = this.add.sprite(width - 200,(height/2) - 200,'makeItHome').setScale(0.3).setAlpha(0)
+        //THE TOWER NEEDS TO BE HERE SO NOTHING COVERS IT 
+        this.tower = this.add.tileSprite((width/2)-10,-height/2,0,0,'tower').setOrigin(0.5,0.5)
         //the particle for the tower angles, make it go upwards and fade out, might add some more particles to make it look better
+
          this.emitter = this.add.particles(this.towerLocationX, this.towerLocationY, 'brick', {
 
              
@@ -100,8 +110,8 @@ class Play extends Phaser.Scene {
              });
 
         //Make lane lines
-        this.add.rectangle(width / 3, height / 2, 10, height, 0x0000f)
-        this.add.rectangle((width / 3) * 2, height / 2, 10, height, 0x0000f)
+        this.add.rectangle(width / 3, height / 2, 10, height, 0x0000f).setAlpha(0.5)
+        this.add.rectangle((width / 3) * 2, height / 2, 10, height, 0x0000f).setAlpha(0.3)
         
 
 
@@ -114,6 +124,7 @@ class Play extends Phaser.Scene {
         //Add score text and health text, change these later, but for now they work for testing
         this.textConfig ={
             fontSize: '64px',
+            fontFamily: 'roman',
             color: '#000000'
         }
         this.scoreText = this.add.text(width/10,height/20,'Score: ',this.textConfig).setOrigin(0.5,0.5)
@@ -183,13 +194,14 @@ class Play extends Phaser.Scene {
             this.vocals.play()
             this.synth.stop()
             this.bgShakeTween = this.tweens.add({
-             targets: this.scrollingBG,
+             targets: [this.scrollingBG,this.tower,this.mouthMan, this.makeItHome],
              angle: { from: -.5, to: .5 }, // keep small for vibration
              duration: 120,               // lower = faster vibration
              yoyo: true,
             repeat: -1,                 
             ease: 'Linear'
 });
+
             break
         case 2:
             this.claps.play()
@@ -209,6 +221,21 @@ class Play extends Phaser.Scene {
             break
         case 5:
             this.questionmarks.setAlpha(1)
+            break
+        case 6:
+            this.mouthMan.setAlpha(0.5)
+            break
+        case 7:
+            this.makeItHome.setAlpha(.9)
+            this.tweens.add({
+            targets: this.makeItHome,
+             scaleX: 0,          
+             duration: 3000,
+            yoyo: true,         
+            repeat: -1,
+            ease: 'Linear'
+});
+            
         }
         
 
@@ -264,6 +291,7 @@ class Play extends Phaser.Scene {
         this.gameover = true
         this.cameras.main.flash(5000, 255, 0, 0)
         this.add.text(width/2,height/2,"Game Over",this.textConfig).setOrigin(0.5,0.5)
+        this.add.text(width/2,(height/2) + 100,"Press 'R' to restart",this.textConfig).setOrigin(0.5,0.5)
         this.keyRestart.on('down',()=>{
         //Stops all music , trun this into a switch case statement for cleaner read, and prob efficeny 
         this.vocals.stop() 

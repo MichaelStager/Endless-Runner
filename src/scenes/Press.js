@@ -10,7 +10,9 @@ class Press extends Phaser.Scene
        // this.load.image('brick','./assets/testEnemy.png')
        // this.load.image('player','./assets/testPlayer.png')
         this.load.image('grassbg','./assets/StartTower.png')
+        this.load.image('titleart','./assets/TitleArt.png')
        // this.load.image('longbg','./assets/longneck.png')
+       this.load.font('roman','./assets/AUGUSTUS.TTF','truetype')
         
     }
 
@@ -18,6 +20,7 @@ class Press extends Phaser.Scene
     {
         //making a text config for uniform text
         let preTextConfig = {
+            fontFamily: 'roman',
             fontSize: 40,
             bold:true,
             fill: '#ff0000'
