@@ -21,13 +21,13 @@ class Press extends Phaser.Scene
         //making a text config for uniform text
         let preTextConfig = {
             fontFamily: 'roman',
-            fontSize: 40,
+            fontSize: 100,
             bold:true,
             fill: '#ff0000'
         }
 
         //display text to screen
-    this.add.text(width/2,height/6,"Click The Screen To Start",preTextConfig).setOrigin(0.5,0.5)
+    this.add.text(width/2,height/2,"Click The Screen To Start",preTextConfig).setOrigin(0.5,0.5)
 
        
     }

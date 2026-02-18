@@ -15,6 +15,7 @@ class Play extends Phaser.Scene {
         this.load.image('tower','./assets/Tower.png')
         this.load.image('mouthMan','./assets/mouthMan.png')
         this.load.image('makeItHome','./assets/MakeItHome.png')
+        this.load.image('chain','./assets/chain.png')
         //audio
         this.load.audio('vocals', './assets/Vocals.wav')
         this.load.audio('synth', './assets/Synth.wav')
@@ -79,6 +80,7 @@ class Play extends Phaser.Scene {
         this.questionmarks = this.add.tileSprite(0,height/2,0,0,'questionmarks').setOrigin(0.5,0.5).setRotation(0.35).setAlpha(0)
         this.mouthMan = this.add.sprite(width/2,(height/2) - 300,'mouthMan').setOrigin(0.5,0.5).setAlpha(0)
         this.makeItHome = this.add.sprite(width - 200,(height/2) - 200,'makeItHome').setScale(0.3).setAlpha(0)
+        this.chain1 = this.add.tileSprite(width/2,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(1.5).setRotation(0.35)
         //THE TOWER NEEDS TO BE HERE SO NOTHING COVERS IT 
         this.tower = this.add.tileSprite((width/2)-10,-height/2,0,0,'tower').setOrigin(0.5,0.5)
         //the particle for the tower angles, make it go upwards and fade out, might add some more particles to make it look better
@@ -132,6 +134,7 @@ class Play extends Phaser.Scene {
         this.scoreText = this.add.text(width/10,height/20,'Score: ',this.textConfig).setOrigin(0.5,0.5)
         this.healthText = this.add.text(width/2,height/20,'health: ' + this.playerHealth,this.textConfig).setOrigin(0.5,0.5)
         this.difficultyLevelText = this.add.text((width / 3) * 2 + (width / 3) / 2,height/20,'Difficulty: ' + this.difficultyLevel,this.textConfig).setOrigin(0.5,0.5)
+        this.highScoreText = this.add.text(width/2,height - 100,"Highscore:",this.textConfig).setOrigin(0.5,0.5)
 
         //add player
         this.player = new Player(this, 'player')
@@ -189,8 +192,8 @@ class Play extends Phaser.Scene {
          this.difficultyLevelText.text = 'Difficulty: ' + this.difficultyLevel
         this.myClock = 0
         this.cameras.main.flash(5000, 255, 255, 255)
-        this.scrollSpeed += 2
-        this.speed += 2
+        this.scrollSpeed += 1
+        this.speed += 1
 
         switch(this.difficultyLevel){
 
@@ -254,6 +257,8 @@ class Play extends Phaser.Scene {
    
     gamePlaying()
     {
+        if(this.highScore == null) { this.highScore = 0}
+         this.highScoreText.text = "HighScore: " + this.highScore
         //for testing question marks rn
         this.questionmarks.tilePositionY-= this.scrollSpeed
         this.updateLanePosition()
@@ -270,6 +275,7 @@ class Play extends Phaser.Scene {
         else {
             this.scrollingBG.tilePositionY -= this.scrollSpeed
             this.tower.tilePositionY -= this.scrollSpeed *3
+            this.chain1.tilePositionY -= this.scrollSpeed
         }
 
 
@@ -298,8 +304,12 @@ class Play extends Phaser.Scene {
 
      gameoverStarted()
     {
+        if(this.highScore ==null || this.highScore < this.score)
+        {
+         this.highScore = this.score 
+        }
         this.gameover = true
-        this.cameras.main.flash(5000, 255, 0, 0)
+        this.cameras.main.flash(5000, 255, 0, 0,true)
         this.add.text(width/2,height/2,"Game Over",this.textConfig).setOrigin(0.5,0.5)
         this.add.text(width/2,(height/2) + 100,"Press 'R' to restart",this.textConfig).setOrigin(0.5,0.5)
         this.keyRestart.on('down',()=>{
