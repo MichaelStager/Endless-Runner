@@ -80,7 +80,9 @@ class Play extends Phaser.Scene {
         this.questionmarks = this.add.tileSprite(0,height/2,0,0,'questionmarks').setOrigin(0.5,0.5).setRotation(0.35).setAlpha(0)
         this.mouthMan = this.add.sprite(width/2,(height/2) - 300,'mouthMan').setOrigin(0.5,0.5).setAlpha(0)
         this.makeItHome = this.add.sprite(width - 200,(height/2) - 200,'makeItHome').setScale(0.3).setAlpha(0)
-        this.chain1 = this.add.tileSprite(width/2,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(1.5).setRotation(0.35)
+        this.chain1 = this.add.tileSprite(width/2,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(3).setRotation(45)
+        this.chain2 = this.add.tileSprite(width/2,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(3).setRotation(-45)
+       
         //THE TOWER NEEDS TO BE HERE SO NOTHING COVERS IT 
         this.tower = this.add.tileSprite((width/2)-10,-height/2,0,0,'tower').setOrigin(0.5,0.5)
         //the particle for the tower angles, make it go upwards and fade out, might add some more particles to make it look better
@@ -110,7 +112,6 @@ class Play extends Phaser.Scene {
 
             // make it look snappy
             blendMode: 'NORMAL'
-
              });
 
         //Make lane lines
@@ -276,6 +277,7 @@ class Play extends Phaser.Scene {
             this.scrollingBG.tilePositionY -= this.scrollSpeed
             this.tower.tilePositionY -= this.scrollSpeed *3
             this.chain1.tilePositionY -= this.scrollSpeed
+            this.chain2.tilePositionY -= this.scrollSpeed
         }
 
 
