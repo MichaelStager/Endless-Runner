@@ -80,8 +80,10 @@ class Play extends Phaser.Scene {
         this.questionmarks = this.add.tileSprite(0,height/2,0,0,'questionmarks').setOrigin(0.5,0.5).setRotation(0.35).setAlpha(0)
         this.mouthMan = this.add.sprite(width/2,(height/2) - 300,'mouthMan').setOrigin(0.5,0.5).setAlpha(0)
         this.makeItHome = this.add.sprite(width - 200,(height/2) - 200,'makeItHome').setScale(0.3).setAlpha(0)
-        this.chain1 = this.add.tileSprite(width/2,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(3).setRotation(45)
-        this.chain2 = this.add.tileSprite(width/2,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(3).setRotation(-45)
+        this.chain1 = this.add.tileSprite(width/2,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(3).setRotation(45).setAlpha(0)
+        this.chain2 = this.add.tileSprite(width/2,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(3).setRotation(-45).setAlpha(0)
+        this.chain3 = this.add.tileSprite(100,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(3).setAlpha(0)
+        this.chain4 = this.add.tileSprite(width - 100,height/2,0,0,'chain').setOrigin(0.5,0.5).setScale(3).setAlpha(0)
        
         //THE TOWER NEEDS TO BE HERE SO NOTHING COVERS IT 
         this.tower = this.add.tileSprite((width/2)-10,-height/2,0,0,'tower').setOrigin(0.5,0.5)
@@ -246,6 +248,12 @@ class Play extends Phaser.Scene {
             });  
             break  
         case 8:
+            this.chain1.setAlpha(1)
+            this.chain2.setAlpha(1)
+            this.chain3.setAlpha(1)
+            this.chain4.setAlpha(1)
+        break
+        case 9:
             this.mouthMan.setAlpha(0.5)
             break
        
@@ -276,8 +284,11 @@ class Play extends Phaser.Scene {
         else {
             this.scrollingBG.tilePositionY -= this.scrollSpeed
             this.tower.tilePositionY -= this.scrollSpeed *3
-            this.chain1.tilePositionY -= this.scrollSpeed
-            this.chain2.tilePositionY -= this.scrollSpeed
+            this.chain1.tilePositionY -= this.scrollSpeed / 2
+            this.chain2.tilePositionY -= this.scrollSpeed / 2
+            this.chain3.tilePositionY -= this.scrollSpeed / 2
+            this.chain4.tilePositionY += this.scrollSpeed / 2
+
         }
 
 
@@ -309,6 +320,7 @@ class Play extends Phaser.Scene {
         if(this.highScore ==null || this.highScore < this.score)
         {
          this.highScore = this.score 
+         this.highScoreText.text = "HighScore: " + this.highScore
         }
         this.gameover = true
         this.cameras.main.flash(5000, 255, 0, 0,true)
