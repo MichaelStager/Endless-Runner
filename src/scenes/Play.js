@@ -1,6 +1,6 @@
 
-
 class Play extends Phaser.Scene {
+    
     constructor() {
         super("playScene")
     }
@@ -16,6 +16,7 @@ class Play extends Phaser.Scene {
         this.load.image('mouthMan','./assets/mouthMan.png')
         this.load.image('makeItHome','./assets/MakeItHome.png')
         this.load.image('chain','./assets/chain.png')
+        this.load.spritesheet('enemy', './assets/EnemyAni.png', {frameWidth: 204, frameHeight: 200})
         //audio
         this.load.audio('vocals', './assets/Vocals.wav')
         this.load.audio('synth', './assets/Synth.wav')
@@ -24,6 +25,8 @@ class Play extends Phaser.Scene {
         this.load.audio('bell', './assets/Bell.wav')
         this.load.audio('evolved','./assets/EvolvedTrack.wav')
         this.load.audio('shieldHit','./assets/ShieldHit.wav')
+        this.load.audio('angelVoice','./assets/angelvoice.wav')
+        this.load.audio('wind','./assets/wind.wav')
 
         //load font
        // this.load.font('roman','./assets/AUGUSTUS.TTF','truetype')
@@ -31,8 +34,9 @@ class Play extends Phaser.Scene {
 
     create() {
         //Declare scene vars here
-        //Make a button for restart after gameover
+        //Make a button for restart and credits after gameover
         this.keyRestart = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R)
+        this.keyCredits = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
         //Gameover bool
         this.gameover = false;
         //Declare audio
@@ -47,9 +51,11 @@ class Play extends Phaser.Scene {
         this.bell = this.sound.add('bell')
         this.evolvedTrack = this.sound.add('evolved',audioConfig)
         this.shieldHit = this.sound.add('shieldHit').setVolume(0.25)
+        this.angelVoice = this.sound.add('angelVoice').setVolume(0.5)
       
         //track score var
         this.score = 0
+        this.highScore = parseInt(localStorage.getItem("highScore") || "0", 10);
         //track health
         this.playerHealth = 5
         //tower cords for animation
@@ -123,21 +129,24 @@ class Play extends Phaser.Scene {
 
 
         //adding enemies to lanes to test positioning (should have a factory that produces these)
-        this.enemy1 = new Obstical(this, (width / 3) / 2, 50, 'brick', 0, this.speed)
-        this.enemy2 = new Obstical(this, (width / 3) + (width / 3) / 2, 50, 'brick', 0, this.speed)
-        this.enemy3 = new Obstical(this, (width / 3) * 2 + (width / 3) / 2, 50, 'brick', 0, this.speed)
+        this.enemy1 = new Obstical(this, (width / 3) / 2, -50, 'enemy', 0, this.speed)
+        this.enemy2 = new Obstical(this, (width / 3) + (width / 3) / 2, 0, 'enemy', 0, this.speed)
+        this.enemy3 = new Obstical(this, (width / 3) * 2 + (width / 3) / 2, -200, 'enemy', 0, this.speed)
         this.enemies = this.physics.add.group([this.enemy1, this.enemy2, this.enemy3])
 
         //Add score text and health text, change these later, but for now they work for testing
         this.textConfig ={
             fontSize: '64px',
             fontFamily: 'roman',
-            color: '#000000'
+            color: '#000000',
+             stroke: '#ffffff',
+            strokeThickness: 8
+            
         }
-        this.scoreText = this.add.text(width/10,height/20,'Score: ',this.textConfig).setOrigin(0.5,0.5)
-        this.healthText = this.add.text(width/2,height/20,'health: ' + this.playerHealth,this.textConfig).setOrigin(0.5,0.5)
-        this.difficultyLevelText = this.add.text((width / 3) * 2 + (width / 3) / 2,height/20,'Difficulty: ' + this.difficultyLevel,this.textConfig).setOrigin(0.5,0.5)
-        this.highScoreText = this.add.text(width/2,height - 100,"Highscore:",this.textConfig).setOrigin(0.5,0.5)
+        this.scoreText = this.add.text(width/10,height/20,'SCORE: ',this.textConfig).setOrigin(0.5,0.5)
+        this.healthText = this.add.text(width/2,height/20,'HEALTH: ' + this.playerHealth,this.textConfig).setOrigin(0.5,0.5)
+        this.difficultyLevelText = this.add.text((width / 3) * 2 + (width / 3) / 2,height/20,'DIFFICULTY: ' + this.difficultyLevel,this.textConfig).setOrigin(0.5,0.5)
+        this.highScoreText = this.add.text(width/2,height - 100,"HIGHSCORE:",this.textConfig).setOrigin(0.5,0.5)
 
         //add player
         this.player = new Player(this, 'player')
@@ -147,7 +156,7 @@ class Play extends Phaser.Scene {
             enemy.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
             this.player.blockAnimation()
             this.score++
-            this.scoreText.text = "Score: " + this.score
+            this.scoreText.text = "SCORE: " + this.score
             this.shieldHit.play()
             
             
@@ -165,7 +174,9 @@ class Play extends Phaser.Scene {
       }
     }
   })
-    }
+
+    
+}
 
     update() {
         if(this.gameover == false){
@@ -181,7 +192,7 @@ class Play extends Phaser.Scene {
                 this.player.setX((width / 3) / 2)
                 break
             case 2:
-                this.player.setX((width / 3) + (width / 3) / 2)
+                this.player.setX((width / 3) + (width / 3) / 2) 
                 break
             case 3:
                 this.player.setX((width / 3) * 2 + (width / 3) / 2)
@@ -192,7 +203,7 @@ class Play extends Phaser.Scene {
     startNextDifficulty() {
         this.bell.play()
         this.difficultyLevel++
-         this.difficultyLevelText.text = 'Difficulty: ' + this.difficultyLevel
+         this.difficultyLevelText.text = 'DIFFICULTY: ' + this.difficultyLevel
         this.myClock = 0
         this.cameras.main.flash(5000, 255, 255, 255)
         this.scrollSpeed += 1
@@ -266,8 +277,8 @@ class Play extends Phaser.Scene {
    
     gamePlaying()
     {
-        if(this.highScore == null) { this.highScore = 0}
-         this.highScoreText.text = "HighScore: " + this.highScore
+        
+         this.highScoreText.text = "HIGHSCORE: " + this.highScore
         //for testing question marks rn
         this.questionmarks.tilePositionY-= this.scrollSpeed
         this.updateLanePosition()
@@ -295,18 +306,21 @@ class Play extends Phaser.Scene {
         //If an enemy goes off the screen, respawn it at the top with a random lane and speed
         if (this.enemy1.y > height + 100) {
             this.playerHealth--
-            this.healthText.text = 'Health: ' +this.playerHealth
+            this.healthText.text = 'HEALTH: ' +this.playerHealth
             this.enemy1.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
+            this.angelVoice.play()
         }
         if (this.enemy2.y > height + 100) {
             this.playerHealth--
-            this.healthText.text = 'Health: ' +this.playerHealth
+            this.healthText.text = 'HEALTH: ' +this.playerHealth
             this.enemy2.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
+            this.angelVoice.play()
         }
         if (this.enemy3.y > height + 100) {
             this.playerHealth--
-            this.healthText.text = 'Health: ' +this.playerHealth
+            this.healthText.text = 'HEALTH: ' +this.playerHealth
             this.enemy3.respawnObstical(this.LanePostions[Phaser.Math.Between(0, 2)], Phaser.Math.Between(this.speed - this.speeddif, this.speed))
+            this.angelVoice.play()
         }
         //Handle GameOver
         if(this.playerHealth <= 0 && this.gameover==false)
@@ -317,15 +331,17 @@ class Play extends Phaser.Scene {
 
      gameoverStarted()
     {
+        
         if(this.highScore ==null || this.highScore < this.score)
         {
+            localStorage.setItem("highScore", String(this.score));
          this.highScore = this.score 
-         this.highScoreText.text = "HighScore: " + this.highScore
+         this.highScoreText.text = "HIGHSCORE: " + this.highScore
         }
         this.gameover = true
         this.cameras.main.flash(5000, 255, 0, 0,true)
         this.add.text(width/2,height/2,"Game Over",this.textConfig).setOrigin(0.5,0.5)
-        this.add.text(width/2,(height/2) + 100,"Press 'R' to restart",this.textConfig).setOrigin(0.5,0.5)
+        this.add.text(width/2,(height/2) + 100,"Press 'R' to Restart \nPress 'C' For Credits",this.textConfig).setOrigin(0.5,0.5)
         this.keyRestart.on('down',()=>{
         //Stops all music , trun this into a switch case statement for cleaner read, and prob efficeny 
         this.vocals.stop() 
@@ -335,6 +351,16 @@ class Play extends Phaser.Scene {
         this.bell.stop()
         this.evolvedTrack.stop()
              this.scene.start('menuScene')
+        })
+         this.keyCredits.on('down',()=>{
+        //Stops all music , trun this into a switch case statement for cleaner read, and prob efficeny 
+        this.vocals.stop() 
+        this.synth.stop()
+        this.claps.stop()
+        this.kicks.stop()
+        this.bell.stop()
+        this.evolvedTrack.stop()
+             this.scene.start('creditsScene')
         })
         
     }
